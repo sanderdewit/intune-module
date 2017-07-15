@@ -80,7 +80,7 @@ function connect-IntuneService {
 }}
 
 ####################################################
-function get-IMobileDevices {
+function get-IntuneManagedDevices {
   [cmdletbinding()]
   param
   (
@@ -106,7 +106,7 @@ function get-IMobileDevices {
 }
 ####################################################
 ####################################################
-Function Invoke-IDeviceAction(){
+Function Invoke-IntuneDeviceAction(){
   <#
       .SYNOPSIS
       This function is used to set a generic intune resources from the Graph API REST interface
@@ -126,9 +126,8 @@ Function Invoke-IDeviceAction(){
     [switch]$Wipe,
     [switch]$Retire,
     [Parameter(Mandatory=$true,HelpMessage="DeviceId (guid) for the Device you want to take action on must be specified:")]$DeviceID,
-    [Parameter(Mandatory=$true,HelpMessage="Specify your authtoken:")]$authtoken
   )
- 
+  if (!($IntuneAuthToken)){throw 'please run connect-IntuneService first'} 
   $graphApiVersion = "Beta"
     try {
         $Count_Params = 0
@@ -148,7 +147,7 @@ Function Invoke-IDeviceAction(){
           $uri = "https://graph.microsoft.com/$graphApiVersion/$($resource)"
           write-verbose $uri
           Write-Verbose "Sending remoteLock command to $DeviceID"
-          Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post
+          Invoke-RestMethod -Uri $uri -Headers $IntuneAuthToken -Method Post
         }}
         elseif($ResetPasscode){
           if($PSCmdlet.ShouldProcess("Reset Passcode '$DeviceID'")){
@@ -156,7 +155,7 @@ Function Invoke-IDeviceAction(){
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($resource)"
             write-verbose $uri
             Write-Verbose "Sending remotePasscode command to $DeviceID"
-            Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post
+            Invoke-RestMethod -Uri $uri -Headers $IntuneAuthToken -Method Post
           }
           else {
             Write-output "Reset of the Passcode for the device $DeviceID was cancelled..."
@@ -168,7 +167,7 @@ Function Invoke-IDeviceAction(){
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($resource)"
             write-verbose $uri
             Write-Verbose "Sending wipe command to $DeviceID"
-            Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post
+            Invoke-RestMethod -Uri $uri -Headers $IntuneAuthToken -Method Post
           }
           else {
             Write-Output "Wipe of the device $DeviceID was cancelled..."
@@ -181,7 +180,7 @@ Function Invoke-IDeviceAction(){
               write-verbose $uri
               Write-Verbose "Sending retire command to $DeviceID"
               Write-Verbose $verbose
-              Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post
+              Invoke-RestMethod -Uri $uri -Headers $IntuneAuthToken -Method Post
             }
             else {
               Write-output "Retire of the device $DeviceID was cancelled..."
