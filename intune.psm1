@@ -199,4 +199,4 @@ Function Invoke-IntuneDeviceAction(){
     break
     }
 }
-export-modulemember -function Get-IAuthtoken, get-IMobileDevices, Invoke-IDeviceAction 
+export-modulemember -function connect-IntuneService, get-IntuneManagedDevices, Invoke-IntuneDeviceAction
