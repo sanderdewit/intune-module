@@ -14,13 +14,13 @@ function connect-IntuneService {
       The function authenticate with the Graph API Interface with the tenant name
       .EXAMPLE
  
-      Get-AuthToken
+      Connect-IntuneService and sets it in the intuneauthtoken variable
  
       Authenticates you with the Graph API interface
  
       .NOTES
  
-      NAME: Get-AuthToken
+      NAME: Connect-IntuneService
  
   #>
  
@@ -28,7 +28,6 @@ function connect-IntuneService {
   param
   (
     [Parameter(Mandatory=$true)]$User,
-    [Parameter(Mandatory=$true)]$tenant,
     [Parameter(Mandatory=$false)][switch]$silent
   )
   process {
@@ -45,7 +44,7 @@ function connect-IntuneService {
   $clientId = "d1ddf0e4-d672-4dae-b554-9d5bdfd93547"
   $redirectUri = "urn:ietf:wg:oauth:2.0:oob"
   $resourceAppIdURI = "https://graph.microsoft.com"
-  $authority = "https://login.windows.net/$Tenant"
+  $authority = 'https://login.windows.net/common'
   try {
     $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority
     # https://msdn.microsoft.com/en-us/library/azure/microsoft.identitymodel.clients.activedirectory.promptbehavior.aspx
