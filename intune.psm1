@@ -95,7 +95,7 @@ function get-IntuneManagedDevices {
       $idevices = Invoke-RestMethod -Uri $($idevices.'@odata.nextLink') -Headers $IntuneAuthToken -Method get
     }
     if ($($idevices.'@odata.nextLink') -eq $null){
-      $results = $res.value
+      $results = $idevices.value
       $idevices = $null
     $processnextlinks = $false}
     write-debug "getting info $idevices"
